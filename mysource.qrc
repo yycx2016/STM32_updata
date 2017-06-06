@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>thank.png</file>
+        <file>logo.png</file>
+        <file>on.jpg</file>
+        <file>off.jpg</file>
+        <file>error.jpg</file>
+    </qresource>
+</RCC>
