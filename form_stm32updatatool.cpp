@@ -32,6 +32,12 @@ Form_stm32UpdataTool::Form_stm32UpdataTool(QWidget *parent) :
 
 }
 
+void Form_stm32UpdataTool::showMessage(QString path)
+{
+    QString fileName = path.section("/",-1,-1);
+    QMessageBox::information(NULL,"文件已改变"," 文件 " + fileName + " 已被修改！ ");
+}
+
 Form_stm32UpdataTool::~Form_stm32UpdataTool()
 {
     delete ui;
@@ -89,9 +95,14 @@ void Form_stm32UpdataTool::on_pushButton_openfile_clicked()// 打开文件
     QSettings settings("./filepath.ini", QSettings::IniFormat);
     currentFileDir.setPath(settings.value("FilePath/currentpath").toString());
 
-    QString fileName =QFileDialog::getOpenFileName(this, tr("Open File"),
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                               currentFileDir.path(),
                                               "HEX file(*.hex);;Any files (*)");
+
+    fsWatcher.addPath(fileName);
+//    qDebug()<< fileName;
+    connect(&fsWatcher, SIGNAL(fileChanged(QString)), this, SLOT(showMessage(QString)));//监控所打开的文件是否变化
+
     if(!fileName.isEmpty() )
     {
         QFile file_in(fileName);

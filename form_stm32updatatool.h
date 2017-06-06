@@ -5,6 +5,7 @@
 #include "Thread_com/MyThread_com.h"
 #include "serialcom.h"
 #include <QProgressBar>
+#include <QFileSystemWatcher>
 
 namespace Ui {
 class Form_stm32UpdataTool;
@@ -16,7 +17,7 @@ class Form_stm32UpdataTool : public QWidget
 
 public:
     explicit Form_stm32UpdataTool(QWidget *parent = 0);
-    QProgressBar *progressBar;
+    QProgressBar   *progressBar;
     ~Form_stm32UpdataTool();
 
 private slots:
@@ -50,6 +51,8 @@ private slots:
     void on_pushButton_clicked();
 
     void on_pushButton_mode_clicked();
+public slots:
+    void showMessage(QString path);
 
 signals:
     void modeChanged();
@@ -69,6 +72,7 @@ private:
     //serialCOM *myserialcom;
     QByteArray inBlock;
 
+    QFileSystemWatcher fsWatcher;
 
 };
 
