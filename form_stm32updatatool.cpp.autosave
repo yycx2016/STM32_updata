@@ -121,7 +121,7 @@ void Form_stm32UpdataTool::updataFile(QString fileName)
             //ui->textBrowser_2->append(tr("文件打开成功，数据格式16进制"));
             //qDebug()<<fileName<<fileName.section("/",-1,-1).section('.',0,0).section('_',1,1);
             ui->label_filename->setText(fileName.section("/",-1,-1));
-            this->setWindowTitle(tr("STM32_CAN在线升级软件 - ").append(ui->label_filename->text()));
+//            this->setWindowTitle(tr("STM32_CAN在线升级软件 - ").append(ui->label_filename->text()));
             ui->spinBox_ID->setValue(fileName.section("/",-1,-1).section('.',0,0).section('_',-1,-1).toInt());
             if((fileName.section("/",-1,-1).section('.',0,0).section('_',-2,-2)=="1k")
              ||(fileName.section("/",-1,-1).section('.',0,0).section('_',-2,-2)=="1K"))
