@@ -41,7 +41,8 @@ Form_tool::Form_tool(QWidget *parent) :
     receive_counter=0;
     sent_byte_counter=0;
     n = 0;
-    ui->setupUi(this);
+    ui->setupUi(this);   
+
     auto_sent_interval=new QTimer(this);//void auto_sent_interval_solt();
     connect(auto_sent_interval,SIGNAL(timeout()),this,SLOT(auto_sent_interval_solt()));
     updateList();

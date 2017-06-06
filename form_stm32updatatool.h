@@ -22,6 +22,7 @@ public:
 
 private slots:
     void timer_ctl_slot();
+
     void infoshow_slot(QString cominfo);
 
     void on_pushButton_openfile_clicked();
@@ -61,9 +62,11 @@ private:
     Ui::Form_stm32UpdataTool *ui;
 
     bool isFileOpen;
+
     int char_count;
     unsigned char to_sent_data[100];
     int cnt_ID;
+
 
     QTime t_last;
 
@@ -73,7 +76,7 @@ private:
     QByteArray inBlock;
 
     QFileSystemWatcher fsWatcher;
-
+    void updataFile(QString fileName);
 };
 
 #endif // FORM_STM32UPDATATOOL_H
