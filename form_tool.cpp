@@ -533,7 +533,7 @@ void Form_tool::on_pushButton_saveList_clicked()
      str += "位数";
      str += "#\n";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                               "",
+                               "init",
                                tr("TXT (*.txt)"));
 
     if (QFileInfo(fileName).suffix().isEmpty()) //若后缀为空自动添加.txt后缀
@@ -639,7 +639,7 @@ void Form_tool::updateList(bool flag)
     if (!QFile::exists("./filepath.ini"))//文件路径
     {
         QSettings settings("./filepath.ini", QSettings::IniFormat);
-        settings.setValue("FilePath/camandcurrentpath", "./");
+        settings.setValue("FilePath/camandcurrentpath", "./init.txt");
         return ;
     }
     QSettings settings("./filepath.ini", QSettings::IniFormat);
