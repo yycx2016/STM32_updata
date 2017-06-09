@@ -42,16 +42,27 @@ Form_tool::Form_tool(QWidget *parent) :
     sent_byte_counter=0;
     n = 0;
     ui->setupUi(this);   
+    LineEdits_auto << ui->lineEdit_auto_1<< ui->lineEdit_auto_2
+                  << ui->lineEdit_auto_3<< ui->lineEdit_auto_4
+                  << ui->lineEdit_auto_5<< ui->lineEdit_auto_6
+                  << ui->lineEdit_auto_7<< ui->lineEdit_auto_8
+                  << ui->lineEdit_auto_9<< ui->lineEdit_auto_10
+                  << ui->lineEdit_auto_11<< ui->lineEdit_auto_12;
+    LineEdits << ui->lineEdit<< ui->lineEdit_2<< ui->lineEdit_3
+              << ui->lineEdit_4<< ui->lineEdit_5<< ui->lineEdit_6
+              << ui->lineEdit_7<< ui->lineEdit_8<< ui->lineEdit_9
+              << ui->lineEdit_10<< ui->lineEdit_11<< ui->lineEdit_12;
 
     auto_sent_interval=new QTimer(this);//void auto_sent_interval_solt();
     connect(auto_sent_interval,SIGNAL(timeout()),this,SLOT(auto_sent_interval_solt()));
-    updateList();
+
+    updateList(0);
 
     connect(serialComTool->comDevice,SIGNAL(readyRead()),this,SLOT(readMyCom()));
 
     //qDebug()<<ui->lineEdit_startFlag->text();
-    startFlag=ui->lineEdit_startFlag->text().section(' ',0,0).toInt();
-    endFlag=ui->lineEdit_startFlag->text().section(' ',1,1).toInt();
+    startFlag = ui->lineEdit_startFlag->text().section(' ',0,0).toInt();
+    endFlag = ui->lineEdit_startFlag->text().section(' ',1,1).toInt();
 
 }
 
@@ -71,7 +82,7 @@ void Form_tool::on_pushButton_clearDisplay_clicked()//清除接收显示
 
 void Form_tool::on_checkBox_16_clicked(bool checked)
 {
-    is16_=checked;
+    is16_= checked;
 }
 
 void Form_tool::readMyCom()//串口接收函数
@@ -377,6 +388,10 @@ void Form_tool::on_pushButton_savefile_clicked()//接收文件保存
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
                                "",
                                tr("TXT (*.txt)"));
+    if ((QFileInfo(fileName).suffix().isEmpty())) //若后缀为空自动添加.txt后缀
+    {
+        fileName.append(".txt");
+    }
     QFile fd(fileName);
        if (fd.open(QIODevice::WriteOnly| QIODevice::Text))
        {
@@ -416,154 +431,295 @@ void Form_tool::auto_sent_interval_solt()//定时器自动发送函数
 
 void Form_tool::on_pushButton_saveList_clicked()
 {
-    QSettings settingsTube("./List.ini", QSettings::IniFormat);
+//    QSettings settingsTube("./List.ini", QSettings::IniFormat);
+//    QString str;
+
+//    str = ui->lineEdit_auto_1->text();
+//    settingsTube.setValue("List/line_1", str);
+//    str = ui->lineEdit->text();
+//    settingsTube.setValue("List/explain_1", str);
+
+//    str = ui->lineEdit_auto_2->text();
+//    settingsTube.setValue("List/line_2", str);
+//    str = ui->lineEdit_2->text();
+//    settingsTube.setValue("List/explain_2", str);
+
+//    str = ui->lineEdit_auto_3->text();
+//    settingsTube.setValue("List/line_3", str);
+//    str = ui->lineEdit_3->text();
+//    settingsTube.setValue("List/explain_3", str);
+
+//    str = ui->lineEdit_auto_4->text();
+//    settingsTube.setValue("List/line_4", str);
+//    str = ui->lineEdit_4->text();
+//    settingsTube.setValue("List/explain_4", str);
+
+//    str = ui->lineEdit_auto_5->text();
+//    settingsTube.setValue("List/line_5", str);
+//    str = ui->lineEdit_5->text();
+//    settingsTube.setValue("List/explain_5", str);
+
+//    str = ui->lineEdit_auto_6->text();
+//    settingsTube.setValue("List/line_6", str);
+//    str = ui->lineEdit_6->text();
+//    settingsTube.setValue("List/explain_6", str);
+
+//    str = ui->lineEdit_auto_7->text();
+//    settingsTube.setValue("List/line_7", str);
+//    str = ui->lineEdit_7->text();
+//    settingsTube.setValue("List/explain_7", str);
+
+//    str = ui->lineEdit_auto_8->text();
+//    settingsTube.setValue("List/line_8", str);
+//    str = ui->lineEdit_8->text();
+//    settingsTube.setValue("List/explain_8", str);
+
+//    str = ui->lineEdit_auto_9->text();
+//    settingsTube.setValue("List/line_9", str);
+//    str = ui->lineEdit_9->text();
+//    settingsTube.setValue("List/explain_9", str);
+
+//    str = ui->lineEdit_auto_10->text();
+//    settingsTube.setValue("List/line_10", str);
+//    str = ui->lineEdit_10->text();
+//    settingsTube.setValue("List/explain_10", str);
+
+//    str = ui->lineEdit_auto_11->text();
+//    settingsTube.setValue("List/line_11", str);
+//    str = ui->lineEdit_11->text();
+//    settingsTube.setValue("List/explain_11", str);
+
+//    str = ui->lineEdit_auto_12->text();
+//    settingsTube.setValue("List/line_12", str);
+//    str = ui->lineEdit_12->text();
+//    settingsTube.setValue("List/explain_12", str);
+
+//    str = ui->lineEdit_startFlag->text();
+//    settingsTube.setValue("List/line_startFlag", str);
+//    str = ui->lineEdit_endFlag->text();
+//    settingsTube.setValue("List/explain_endFlag", str);
+//    settingsTube.setValue("List/explain_dataNum", ui->spinBox_dataNum->value());
+
     QString str;
+    QList<QLineEdit*>::size_type i;
+    for( i= 0;(i != LineEdits_auto.size())||( i!= LineEdits.size());++i)
+     {
+        if(i < LineEdits_auto.size())
+        {
+            str += "指令" + QString::number(i+1) +':';
+            str += LineEdits_auto.at(i)->text();
+            str += '#';
+        }
+        if(i < LineEdits.size())
+        {
+            str += LineEdits.at(i)->text();
+            str += "#\n";
+        }
+//      qDebug()<<LineEdits_auto.at(i) <<LineEdits.at(i);
+     }
+     str += "标志" +  QString::number((++i)+1) +'=';
+     str += ui->lineEdit_startFlag->text();
+     str += "#";
+     str += "起始标志";
+     str += "#\n";
+     str += "标志" +  QString::number((++i)+1)+'=';
+     str += ui->lineEdit_endFlag->text();
+     str += "#";
+     str += "结束标志";
+     str += "#\n";
+     str += "标志" +  QString::number((++i)+1) +'=';
+     str += QString::number(ui->spinBox_dataNum->value());
+     str += "#";
+     str += "位数";
+     str += "#\n";
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                               "",
+                               tr("TXT (*.txt)"));
 
-    str = ui->lineEdit_auto_1->text();
-    settingsTube.setValue("List/line_1", str);
-    str = ui->lineEdit->text();
-    settingsTube.setValue("List/explain_1", str);
+    if (QFileInfo(fileName).suffix().isEmpty()) //若后缀为空自动添加.txt后缀
+    {
+        fileName.append(".txt");
+    }
 
-    str = ui->lineEdit_auto_2->text();
-    settingsTube.setValue("List/line_2", str);
-    str = ui->lineEdit_2->text();
-    settingsTube.setValue("List/explain_2", str);
+   QFile fd(fileName);
+   if (fd.open(QIODevice::WriteOnly| QIODevice::Text))
+   {
+       QSettings settings("./filepath.ini", QSettings::IniFormat);
+       settings.setValue("FilePath/camandcurrentpath", fileName);
 
-    str = ui->lineEdit_auto_3->text();
-    settingsTube.setValue("List/line_3", str);
-    str = ui->lineEdit_3->text();
-    settingsTube.setValue("List/explain_3", str);
-
-    str = ui->lineEdit_auto_4->text();
-    settingsTube.setValue("List/line_4", str);
-    str = ui->lineEdit_4->text();
-    settingsTube.setValue("List/explain_4", str);
-
-    str = ui->lineEdit_auto_5->text();
-    settingsTube.setValue("List/line_5", str);
-    str = ui->lineEdit_5->text();
-    settingsTube.setValue("List/explain_5", str);
-
-    str = ui->lineEdit_auto_6->text();
-    settingsTube.setValue("List/line_6", str);
-    str = ui->lineEdit_6->text();
-    settingsTube.setValue("List/explain_6", str);
-
-    str = ui->lineEdit_auto_7->text();
-    settingsTube.setValue("List/line_7", str);
-    str = ui->lineEdit_7->text();
-    settingsTube.setValue("List/explain_7", str);
-
-    str = ui->lineEdit_auto_8->text();
-    settingsTube.setValue("List/line_8", str);
-    str = ui->lineEdit_8->text();
-    settingsTube.setValue("List/explain_8", str);
-
-    str = ui->lineEdit_auto_9->text();
-    settingsTube.setValue("List/line_9", str);
-    str = ui->lineEdit_9->text();
-    settingsTube.setValue("List/explain_9", str);
-
-    str = ui->lineEdit_auto_10->text();
-    settingsTube.setValue("List/line_10", str);
-    str = ui->lineEdit_10->text();
-    settingsTube.setValue("List/explain_10", str);
-
-    str = ui->lineEdit_auto_11->text();
-    settingsTube.setValue("List/line_11", str);
-    str = ui->lineEdit_11->text();
-    settingsTube.setValue("List/explain_11", str);
-
-    str = ui->lineEdit_auto_12->text();
-    settingsTube.setValue("List/line_12", str);
-    str = ui->lineEdit_12->text();
-    settingsTube.setValue("List/explain_12", str);
-
-    str = ui->lineEdit_startFlag->text();
-    settingsTube.setValue("List/line_startFlag", str);
-    str = ui->lineEdit_endFlag->text();
-    settingsTube.setValue("List/explain_endFlag", str);
-
-    settingsTube.setValue("List/explain_dataNum", ui->spinBox_dataNum->value());
-
+       fd.seek(0);
+       QByteArray text;
+       text.clear();
+       text=text.append(str);
+       fd.write(text);
+       fd.close();
+   }
 }
 
-void Form_tool::updateList()
+void Form_tool::updateList(bool flag)
 {
-    if (QFile::exists("./List.ini"))
+//    if (QFile::exists("./List.ini"))
+//    {
+//        QSettings settingsTube("./List.ini", QSettings::IniFormat);
+//        QString str;
+//        settingsTube.beginGroup("List");
+//        str = settingsTube.value("line_1").toString();
+//        ui->lineEdit_auto_1->setText(str);
+//        str = settingsTube.value("explain_1").toString();
+//        ui->lineEdit->setText(str);
+
+//        str = settingsTube.value("line_2").toString();
+//        ui->lineEdit_auto_2->setText(str);
+//        str = settingsTube.value("explain_2").toString();
+//        ui->lineEdit_2->setText(str);
+
+//        str = settingsTube.value("line_3").toString();
+//        ui->lineEdit_auto_3->setText(str);
+//        str = settingsTube.value("explain_3").toString();
+//        ui->lineEdit_3->setText(str);
+
+//        str = settingsTube.value("line_4").toString();
+//        ui->lineEdit_auto_4->setText(str);
+//        str = settingsTube.value("explain_4").toString();
+//        ui->lineEdit_4->setText(str);
+
+//        str = settingsTube.value("line_5").toString();
+//        ui->lineEdit_auto_5->setText(str);
+//        str = settingsTube.value("explain_5").toString();
+//        ui->lineEdit_5->setText(str);
+
+//        str = settingsTube.value("line_6").toString();
+//        ui->lineEdit_auto_6->setText(str);
+//        str = settingsTube.value("explain_6").toString();
+//        ui->lineEdit_6->setText(str);
+
+//        str = settingsTube.value("line_7").toString();
+//        ui->lineEdit_auto_7->setText(str);
+//        str = settingsTube.value("explain_7").toString();
+//        ui->lineEdit_7->setText(str);
+
+//        str = settingsTube.value("line_8").toString();
+//        ui->lineEdit_auto_8->setText(str);
+//        str = settingsTube.value("explain_8").toString();
+//        ui->lineEdit_8->setText(str);
+
+//        str = settingsTube.value("line_9").toString();
+//        ui->lineEdit_auto_9->setText(str);
+//        str = settingsTube.value("explain_9").toString();
+//        ui->lineEdit_9->setText(str);
+
+//        str = settingsTube.value("line_10").toString();
+//        ui->lineEdit_auto_10->setText(str);
+//        str = settingsTube.value("explain_10").toString();
+//        ui->lineEdit_10->setText(str);
+
+//        str = settingsTube.value("line_11").toString();
+//        ui->lineEdit_auto_11->setText(str);
+//        str = settingsTube.value("explain_11").toString();
+//        ui->lineEdit_11->setText(str);
+
+//        str = settingsTube.value("line_12").toString();
+//        ui->lineEdit_auto_12->setText(str);
+//        str = settingsTube.value("explain_12").toString();
+//        ui->lineEdit_12->setText(str);
+
+//        str = settingsTube.value("line_startFlag").toString();
+//        ui->lineEdit_startFlag->setText(str);
+//        str = settingsTube.value("explain_endFlag").toString();
+//        ui->lineEdit_endFlag->setText(str);
+
+//        ui->spinBox_dataNum->setValue(settingsTube.value("explain_dataNum").toInt());
+
+//        settingsTube.endGroup();
+
+//    }
+
+    QDir currentFileDir;
+    QString fileName;
+    if (!QFile::exists("./filepath.ini"))//文件路径
     {
-        QSettings settingsTube("./List.ini", QSettings::IniFormat);
-        QString str;
-        settingsTube.beginGroup("List");
-        str = settingsTube.value("line_1").toString();
-        ui->lineEdit_auto_1->setText(str);
-        str = settingsTube.value("explain_1").toString();
-        ui->lineEdit->setText(str);
-
-        str = settingsTube.value("line_2").toString();
-        ui->lineEdit_auto_2->setText(str);
-        str = settingsTube.value("explain_2").toString();
-        ui->lineEdit_2->setText(str);
-
-        str = settingsTube.value("line_3").toString();
-        ui->lineEdit_auto_3->setText(str);
-        str = settingsTube.value("explain_3").toString();
-        ui->lineEdit_3->setText(str);
-
-        str = settingsTube.value("line_4").toString();
-        ui->lineEdit_auto_4->setText(str);
-        str = settingsTube.value("explain_4").toString();
-        ui->lineEdit_4->setText(str);
-
-        str = settingsTube.value("line_5").toString();
-        ui->lineEdit_auto_5->setText(str);
-        str = settingsTube.value("explain_5").toString();
-        ui->lineEdit_5->setText(str);
-
-        str = settingsTube.value("line_6").toString();
-        ui->lineEdit_auto_6->setText(str);
-        str = settingsTube.value("explain_6").toString();
-        ui->lineEdit_6->setText(str);
-
-        str = settingsTube.value("line_7").toString();
-        ui->lineEdit_auto_7->setText(str);
-        str = settingsTube.value("explain_7").toString();
-        ui->lineEdit_7->setText(str);
-
-        str = settingsTube.value("line_8").toString();
-        ui->lineEdit_auto_8->setText(str);
-        str = settingsTube.value("explain_8").toString();
-        ui->lineEdit_8->setText(str);
-
-        str = settingsTube.value("line_9").toString();
-        ui->lineEdit_auto_9->setText(str);
-        str = settingsTube.value("explain_9").toString();
-        ui->lineEdit_9->setText(str);
-
-        str = settingsTube.value("line_10").toString();
-        ui->lineEdit_auto_10->setText(str);
-        str = settingsTube.value("explain_10").toString();
-        ui->lineEdit_10->setText(str);
-
-        str = settingsTube.value("line_11").toString();
-        ui->lineEdit_auto_11->setText(str);
-        str = settingsTube.value("explain_11").toString();
-        ui->lineEdit_11->setText(str);
-
-        str = settingsTube.value("line_12").toString();
-        ui->lineEdit_auto_12->setText(str);
-        str = settingsTube.value("explain_12").toString();
-        ui->lineEdit_12->setText(str);
-
-        str = settingsTube.value("line_startFlag").toString();
-        ui->lineEdit_startFlag->setText(str);
-        str = settingsTube.value("explain_endFlag").toString();
-        ui->lineEdit_endFlag->setText(str);
-
-        ui->spinBox_dataNum->setValue(settingsTube.value("explain_dataNum").toInt());
-
-        settingsTube.endGroup();
-
+        QSettings settings("./filepath.ini", QSettings::IniFormat);
+        settings.setValue("FilePath/camandcurrentpath", "./");
+        return ;
+    }
+    QSettings settings("./filepath.ini", QSettings::IniFormat);
+    currentFileDir.setPath(settings.value("FilePath/camandcurrentpath").toString());
+    if(flag == 1)
+    {
+      fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                              currentFileDir.path(),
+                                              "TXT file(*.txt);;Any files (*)");
+    }
+    else
+    {
+       fileName = currentFileDir.path();
+    }
+//    qDebug()<<fileName;
+    int i = 0;
+    QString stringbuffer;
+    QString buff;
+    if(!fileName.isEmpty() )
+    {
+        QFile file_in(fileName);
+        if (file_in.open(QIODevice::ReadOnly))
+        {
+            QSettings settings("./filepath.ini", QSettings::IniFormat);
+            settings.setValue("FilePath/camandcurrentpath", fileName);
+            stringbuffer = file_in.readAll();
+                for(int j = 0;j < stringbuffer.size() ;j++)
+                {
+//                    qDebug() << stringbuffer.at(j);
+                    if(stringbuffer.at(j) == ':')
+                    {
+                        if(i < LineEdits_auto.size())
+                        {
+                            buff.clear();
+                            for(j = j+1;stringbuffer.at(j) != '#';j++)
+                            {
+                               buff +=stringbuffer.at(j);
+                            }
+                            LineEdits_auto.at(i)->setText(buff);
+//                            qDebug()<<buff;
+                        }
+                        if(i < LineEdits.size())
+                        {
+                            buff.clear();
+                            for(j = j+1;stringbuffer.at(j) != '#';j++)
+                            {
+                               buff +=stringbuffer.at(j);
+                            }
+                            LineEdits.at(i)->setText(buff);
+//                            qDebug()<<buff;
+                        }
+                        i++;
+                    }
+                    else if(stringbuffer.at(j) == '=')
+                    {
+                        QString temp;
+                        for(j = j+1;stringbuffer.at(j) != '#';j++)
+                        {
+                           temp +=stringbuffer.at(j);
+                        }
+                        buff.clear();
+                        for(j = j+1;stringbuffer.at(j) != '#';j++)
+                        {
+                            buff +=stringbuffer.at(j);
+                        }
+                        if(buff == "起始标志")
+                        {
+                            ui->lineEdit_startFlag->setText(temp);
+                        }
+                        else if(buff == "结束标志")
+                        {
+                            ui->lineEdit_endFlag->setText(temp);
+                        }else if(buff == "位数")
+                        {
+                            ui->spinBox_dataNum->setValue(temp.toInt(0,10));
+                        }
+//                        qDebug()<<temp;
+                    }
+                }
+        }
     }
 
 }
@@ -1029,4 +1185,9 @@ void Form_tool::on_pushButton_condition_clicked(bool checked)
                        tr("请在右侧的的小框内勾选要发送的指令……"));
       }
     }
+}
+
+void Form_tool::on_pushButton_open_clicked()
+{
+    updateList(1);
 }

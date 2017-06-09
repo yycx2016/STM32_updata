@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QSocketNotifier>
-
+#include <QLineEdit>
 
 namespace Ui {
 class Form_tool;
@@ -28,7 +28,7 @@ private slots:
 
     void send_solt_GZZ(QString user_input);
     void auto_sent_interval_solt();
-    void updateList();
+    void updateList(bool flag);
     void readMyCom();//串口接收函数
     int send_GZZ(void);//选择发送指令
     void on_pushButton_send_1_clicked();
@@ -135,6 +135,8 @@ private slots:
 
     void on_pushButton_condition_clicked(bool checked);
 
+    void on_pushButton_open_clicked();
+
 signals:
     void modeChanged();
 private:
@@ -156,6 +158,9 @@ private:
     QTimer *auto_sent_interval;
     QFile saved;
     QFile file;
+
+    QList <QLineEdit*> LineEdits_auto ;
+    QList <QLineEdit*> LineEdits;
 };
 
 #endif // FORM_TOOL_H

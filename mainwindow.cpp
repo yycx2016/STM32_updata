@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle(tr("在线升级软件_1.2.3"));
+    this->setWindowTitle(tr("在线升级软件_1.2.4"));
 
     stm32UpdataTool = new Form_stm32UpdataTool(this);
     ui->tab->layout()->addWidget(stm32UpdataTool);
@@ -247,14 +247,14 @@ void MainWindow::openSerial_slot()// 打开串口
 void MainWindow::on_comboBox_mode_currentIndexChanged(int index)
 {
     gCom_QueryMode = index;
-    qDebug() << index;
+//    qDebug() << index;
     updataComStatus();
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     gCom_QueryMode = index;
-    qDebug() << index;
+//    qDebug() << index;
     if(index != 0)
     {
      updataComStatus();
