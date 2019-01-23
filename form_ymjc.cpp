@@ -42,6 +42,7 @@ Form_ymjc::~Form_ymjc()
     delete ui;
 
 }
+
 void Form_ymjc::readMyCom()
 {
     overtime.restart();
@@ -75,6 +76,7 @@ void Form_ymjc::readMyCom()
         }
     }
 }
+
 void Form_ymjc::on_pushButton_start_clicked()
 {
     if(!com_status)
@@ -155,6 +157,7 @@ void Form_ymjc::on_pushButton_clicked()
     }
 
 }
+
 void Form_ymjc::on_checkBox_CH1_clicked(bool checked)
 {
     ADValueCurve->slot_drawCurve(0, checked);
@@ -174,7 +177,6 @@ void Form_ymjc::on_checkBox_CH4_clicked(bool checked)
 {
     ADValueCurve->slot_drawCurve(3, checked);
 }
-
 
 void Form_ymjc::timer_getValue_slot()
 {

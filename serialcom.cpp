@@ -121,7 +121,7 @@ QString string_errorinfo;
 QTime t1;
 bool serialCOM::send_slot(const char *sendDataBuf,int len)
 {
-    int nByte=-1;
+    int nByte = -1;
     char receiveData[0];
     while(comDevice->bytesAvailable())
     {

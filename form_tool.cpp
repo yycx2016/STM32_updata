@@ -115,9 +115,13 @@ void Form_tool::readMyCom()//串口接收函数
             if(receivebuf[0] == startFlag&&receivebuf[1] == endFlag)
             {
                 if(receivebuf[3]==100) string_recv+=tr("编码值:%1").arg(receivebuf[4]*256+receivebuf[5]);
+                if(receivebuf[4]==8&&receivebuf[5] == 2) string_recv+=tr("编码器AB正交值:%1").arg((receivebuf[6]<<16)+(receivebuf[7]<<8)+receivebuf[8]);
+                if(receivebuf[4]==8&&receivebuf[5] == 3) string_recv+=tr("编码器电机脉冲值:%1").arg((receivebuf[6]<<16)+(receivebuf[7]<<8)+receivebuf[8]);
+                if(receivebuf[3]==100) string_recv+=tr("编码值:%1").arg(receivebuf[4]*256+receivebuf[5]);
                 if(receivebuf[3]==3&&receivebuf[4]==2) string_recv+=tr("AD值:%1").arg(receivebuf[5]*256+receivebuf[6]);
                 if(receivebuf[3]==0x14) string_recv+=tr("对管值:%1").arg(receivebuf[5]*256+receivebuf[6]);
                 if(receivebuf[3]==0x1f) string_recv+=tr("对管初值:%1").arg(receivebuf[5]*256+receivebuf[6]);
+                if(receivebuf[3]==0xfe) string_recv+=tr("%1年%2月%3日").arg(receivebuf[6]).arg(receivebuf[7]).arg(receivebuf[8]);
                 if(receivebuf[3]==18||(receivebuf[3]==129&&receivebuf[4]==2))
                 {
                     string_recv+=(tr("电机执行完毕"));
@@ -129,24 +133,20 @@ void Form_tool::readMyCom()//串口接收函数
                     if(receivebuf[3] == 18||(receivebuf[3]==129&&receivebuf[4]==2))
                     {
                         //ui->comReceivePlainTextEdit->append(tr(" 自动应答"));
-                        if(isFinish == true)
+                        QString user_input;
+                        if(receivebuf[3] == 18)
                         {
-                            QString user_input;
-                            if(receivebuf[3] == 18)
-                            {
-                                user_input=tr("%1 9 1 0 0 0 0 0 0").arg(receivebuf[8]);//电机应答 旧
-                                send_solt_GZZ(user_input);// 串口发送 字符转换函数
-                            }
-                            else
-                            {
-                                user_input=tr("%1 128 255 0 0 0 0 0 0").arg(receivebuf[9]);//电机应答 新
-                                send_solt_GZZ(user_input);// 串口发送 字符转换函数
-                            }
-                            send_GZZ();
+                            user_input=tr("%1 9 1 0 0 0 0 0 0").arg(receivebuf[8]);//电机应答 旧
+                            send_solt_GZZ(user_input);// 串口发送 字符转换函数
                         }
                         else
                         {
-                            on_pushButton_OldAsk_clicked();// 电机应答 旧
+                            user_input=tr("%1 128 255 0 0 0 0 0 0").arg(receivebuf[9]);//电机应答 新
+                            send_solt_GZZ(user_input);// 串口发送 字符转换函数
+                        }
+                        if(isFinish == true)
+                        {
+                            send_GZZ();
                         }
                     }
                 }
@@ -174,140 +174,130 @@ void Form_tool::readMyCom()//串口接收函数
 int Form_tool::send_GZZ()
 {
    bool iSsend = false;
-   int  overtime = 0;
+   int i = 0 ,cnt = 0;
    Sleep(100);//延时以防底层收不到
-   for(int i = selectStep;i < 15;i++)
+   for(i = selectStep; i < 13; i++)
    {
-    switch(i)
-    {
-       case 1:
+        switch(i)
+        {
+           case 1:
+           {
+            if(ui->checkBox_auto_1->isChecked())
+             {
+                 send_solt_GZZ(ui->lineEdit_auto_1->text());
+                 iSsend = true;
+             }
+           }break;
+        case 2:
+        {
+          if(ui->checkBox_auto_2->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_2->text());
+              iSsend = true;
+          }
+        }break;
+        case 3:
+        {
+          if(ui->checkBox_auto_3->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_3->text());
+              iSsend = true;
+          }
+        }break;
+        case 4:
+        {
+          if(ui->checkBox_auto_4->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_4->text());
+              iSsend = true;
+          }
+        }break;
+        case 5:
+        {
+          if(ui->checkBox_auto_5->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_5->text());
+              iSsend = true;
+          }
+        }break;
+        case 6:
+        {
+          if(ui->checkBox_auto_6->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_6->text());
+              iSsend = true;
+
+          }
+        }break;
+        case 7:
+        {
+          if(ui->checkBox_auto_7->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_7->text());
+              iSsend = true;
+          }
+        }break;
+        case 8:
+        {
+          if(ui->checkBox_auto_8->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_8->text());
+              iSsend = true;
+          }
+        }break;
+        case 9:
+        {
+          if(ui->checkBox_auto_9->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_9->text());
+              iSsend = true;
+          }
+        }break;
+        case 10:
+        {
+          if(ui->checkBox_auto_10->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_10->text());
+              iSsend = true;
+          }
+        }break;
+        case 11:
+        {
+          if(ui->checkBox_auto_11->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_11->text());
+              iSsend = true;
+          }
+        }break;
+        case 12:
+        {
+          if(ui->checkBox_auto_12->isChecked())
+          {
+              send_solt_GZZ(ui->lineEdit_auto_12->text());
+              iSsend = true;
+          }
+        }break;
+         default:
+            break;
+      }
+       if(iSsend == true )
        {
-        if(ui->checkBox_auto_1->isChecked())
-         {
-             send_solt_GZZ(ui->lineEdit_auto_1->text());
-             iSsend = true;
-         }
-       }break;
-    case 2:
-    {
-      if(ui->checkBox_auto_2->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_2->text());
-          iSsend = true;
-      }
-    }break;
-    case 3:
-    {
-      if(ui->checkBox_auto_3->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_3->text());
-          iSsend = true;
-      }
-    }break;
-    case 4:
-    {
-      if(ui->checkBox_auto_4->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_4->text());
-          iSsend = true;
-      }
-    }break;
-    case 5:
-    {
-      if(ui->checkBox_auto_5->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_5->text());
-          iSsend = true;
-      }
-    }break;
-    case 6:
-    {
-      if(ui->checkBox_auto_6->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_6->text());
-          iSsend = true;
-
-      }
-    }break;
-    case 7:
-    {
-      if(ui->checkBox_auto_7->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_7->text());
-          iSsend = true;
-      }
-    }break;
-    case 8:
-    {
-      if(ui->checkBox_auto_8->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_8->text());
-          iSsend = true;
-      }
-    }break;
-    case 9:
-    {
-      if(ui->checkBox_auto_9->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_9->text());
-          iSsend = true;
-      }
-    }break;
-    case 10:
-    {
-      if(ui->checkBox_auto_10->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_10->text());
-          iSsend = true;
-      }
-    }break;
-    case 11:
-    {
-      if(ui->checkBox_auto_11->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_11->text());
-          iSsend = true;
-      }
-    }break;
-    case 12:
-    {
-      if(ui->checkBox_auto_12->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_12->text());
-          iSsend = true;
-      }
-    }break;
-    case 13:
-    {
-      if(ui->checkBox_auto_12->isChecked())
-      {
-          send_solt_GZZ(ui->lineEdit_auto_12->text());
-          iSsend = true;
-      }
-    }break;
-    case 14:
-    {
-       i = 0;
-    }
-     break;
-     default:
-        break;
-  }
-     if((iSsend == true )||(overtime++ > 0x1f))
-    {
-
-        if(overtime >= 0x1f)
-        {
-            ui->comReceivePlainTextEdit->append(tr("条件轮发，回数据……"));
-        }
-        else
-        {
            selectStep = i + 1;
-        }
-        break;
-    }
-   }
-
+           break;//跳出for循环
+       }
+       else if( i >= 12)
+       {
+           if(cnt++ > 2)
+           {
+               selectStep = 0;
+               break;//跳出for循环
+           }
+           else
+           {
+               i = 0;
+           }
+       }
+   }//for
    return  iSsend;
 }
 
@@ -406,27 +396,50 @@ void Form_tool::on_pushButton_savefile_clicked()//接收文件保存
 
 void Form_tool::on_pushButton_cycle_clicked()//开始定时轮发
 {
-    auto_sent_interval->start(ui->spinBox_delay_ms->value());
+    selectStep = 0;
+    if (send_GZZ() == false)
+    {
+      QMessageBox::about(this,tr("提示"),
+                   tr("请在右侧的的小框内勾选要发送的指令……"));
+    }
+    else
+    {
+      auto_sent_interval->start(ui->spinBox_delay_ms->value());
+      ui->pushButton_condition->setDisabled(true);
+    }
+
 }
-int isAutoSend = false;
+
+//void Form_tool::auto_sent_interval_solt1()//定时器自动发送函数
+//{
+//    auto_sent_interval->stop();
+//    isAutoSend = false;
+//    if(ui->checkBox_auto_1->isChecked()){send_solt_GZZ(ui->lineEdit_auto_1->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_2->isChecked()){send_solt_GZZ(ui->lineEdit_auto_2->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_3->isChecked()){send_solt_GZZ(ui->lineEdit_auto_3->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_4->isChecked()){send_solt_GZZ(ui->lineEdit_auto_4->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_5->isChecked()){send_solt_GZZ(ui->lineEdit_auto_5->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_6->isChecked()){send_solt_GZZ(ui->lineEdit_auto_6->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_7->isChecked()){send_solt_GZZ(ui->lineEdit_auto_7->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_8->isChecked()){send_solt_GZZ(ui->lineEdit_auto_8->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_9->isChecked()){send_solt_GZZ(ui->lineEdit_auto_9->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_10->isChecked()){send_solt_GZZ(ui->lineEdit_auto_10->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_11->isChecked()){send_solt_GZZ(ui->lineEdit_auto_11->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(ui->checkBox_auto_12->isChecked()){send_solt_GZZ(ui->lineEdit_auto_12->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
+//    if(isAutoSend)auto_sent_interval->start(ui->spinBox_delay_ms->value());
+//}
 
 void Form_tool::auto_sent_interval_solt()//定时器自动发送函数
 {
     auto_sent_interval->stop();
-    isAutoSend = false;
-    if(ui->checkBox_auto_1->isChecked()){send_solt_GZZ(ui->lineEdit_auto_1->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_2->isChecked()){send_solt_GZZ(ui->lineEdit_auto_2->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_3->isChecked()){send_solt_GZZ(ui->lineEdit_auto_3->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_4->isChecked()){send_solt_GZZ(ui->lineEdit_auto_4->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_5->isChecked()){send_solt_GZZ(ui->lineEdit_auto_5->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_6->isChecked()){send_solt_GZZ(ui->lineEdit_auto_6->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_7->isChecked()){send_solt_GZZ(ui->lineEdit_auto_7->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_8->isChecked()){send_solt_GZZ(ui->lineEdit_auto_8->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_9->isChecked()){send_solt_GZZ(ui->lineEdit_auto_9->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_10->isChecked()){send_solt_GZZ(ui->lineEdit_auto_10->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_11->isChecked()){send_solt_GZZ(ui->lineEdit_auto_11->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(ui->checkBox_auto_12->isChecked()){send_solt_GZZ(ui->lineEdit_auto_12->text());isAutoSend=true;Sleep(100);}//延时以防底层收不到
-    if(isAutoSend)auto_sent_interval->start(ui->spinBox_delay_ms->value());
+    if(send_GZZ() == true)
+    {
+        auto_sent_interval->start(ui->spinBox_delay_ms->value());
+    }
+     else
+    {
+        ui->pushButton_condition->setDisabled(false);
+    }
 }
 
 void Form_tool::on_pushButton_saveList_clicked()
@@ -1170,7 +1183,7 @@ void Form_tool::on_pushButton_YM_MotorAsk_clicked()
 
 void Form_tool::on_checkBox_automated_clicked(bool checked)
 {
-    isAutoMated=checked;
+    isAutoMated = checked;
 }
 
 void Form_tool::on_pushButton_condition_clicked(bool checked)
@@ -1184,10 +1197,83 @@ void Form_tool::on_pushButton_condition_clicked(bool checked)
           QMessageBox::about(this,tr("提示"),
                        tr("请在右侧的的小框内勾选要发送的指令……"));
       }
+      else
+      {
+          isAutoMated = true;
+          ui->checkBox_automated->setChecked(true);
+          ui->pushButton_cycle->setDisabled(true);
+      }
+    }
+    else
+    {
+        ui->checkBox_automated->setChecked(false);
+        ui->pushButton_cycle->setDisabled(false);
     }
 }
 
 void Form_tool::on_pushButton_open_clicked()
 {
     updateList(1);
+}
+//编码器AB正交值查询
+void Form_tool::on_pushButton_encoder_CX_clicked()
+{
+    QString user_input;
+    //ID 1 2 3 4 5 6 7 8
+    user_input=tr("%1 128 51 0 0 0 0 0 0").arg(ui->spinBox_encoderID->value());
+    send_solt_GZZ(user_input);// 串口发送 字符转换函数
+}
+
+//设置编码器分度值
+void Form_tool::on_pushButton_encoder_Scale_clicked()
+{
+    QString user_input;
+    user_input=tr("%1 128 50 %2 %3 0 0 0 0")
+            .arg(ui->spinBox_encoderID->value())
+            .arg((ui->spinBox_encoderID_2->value()>>8)&0xff)
+            .arg((ui->spinBox_encoderID_2->value())&0xff)
+            ;
+    send_solt_GZZ(user_input);// 串口发送 字符转换函数
+}
+//设置最小误差脉冲
+void Form_tool::on_pushButton_encoder_Error_clicked()
+{
+    QString user_input;
+    user_input=tr("%1 128 52 %2 %3 %4 %5 0 0")
+            .arg(ui->spinBox_encoderID->value())
+            .arg((ui->spinBox_encoderID_3->value()>>24)&0xff)
+            .arg((ui->spinBox_encoderID_3->value()>>16)&0xff)
+            .arg((ui->spinBox_encoderID_3->value()>>8)&0xff)
+            .arg((ui->spinBox_encoderID_3->value())&0xff)
+            ;
+    send_solt_GZZ(user_input);// 串口发送 字符转换函数
+}
+//设置编码器方向
+void Form_tool::on_pushButton_EncoderDirSet_clicked()
+{
+    QString user_input;
+    user_input=tr("%1 128 48 %2 0 0 0 0 0")
+            .arg(ui->spinBox_encoderID->value())
+            .arg((ui->comboBox_EncoderDirSet->currentIndex()))
+            ;
+    send_solt_GZZ(user_input);// 串口发送 字符转换函数
+
+}
+//设置编码器使能
+void Form_tool::on_pushButton_EncoderEnanble_clicked()
+{
+    QString user_input;
+    user_input=tr("%1 128 49 %2 0 0 0 0 0")
+            .arg(ui->spinBox_encoderID->value())
+            .arg((ui->comboBox_EncoderEnanble->currentIndex()))
+            ;
+    send_solt_GZZ(user_input);// 串口发送 字符转换函数
+}
+//编码器电机脉冲值查询
+void Form_tool::on_pushButton_encoder_CX_2_clicked()
+{
+    QString user_input;
+    //ID 1 2 3 4 5 6 7 8
+    user_input=tr("%1 128 54 0 0 0 0 0 0").arg(ui->spinBox_encoderID->value());
+    send_solt_GZZ(user_input);// 串口发送 字符转换函数
 }

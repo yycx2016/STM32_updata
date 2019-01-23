@@ -137,6 +137,18 @@ private slots:
 
     void on_pushButton_open_clicked();
 
+    void on_pushButton_encoder_CX_clicked();
+
+    void on_pushButton_encoder_Scale_clicked();
+
+    void on_pushButton_encoder_Error_clicked();
+
+    void on_pushButton_EncoderDirSet_clicked();
+
+    void on_pushButton_EncoderEnanble_clicked();
+
+    void on_pushButton_encoder_CX_2_clicked();
+
 signals:
     void modeChanged();
 private:

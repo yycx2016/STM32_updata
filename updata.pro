@@ -6,7 +6,7 @@
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets core gui network printsupport sql
 #QT       += serialport
 QT        += serialport svg opengl#testlib
-TARGET = stm32updata_1_4_4
+TARGET = stm32updata_1_5_4
 #TARGET = ../../QT_TARGET\stm32updata_1_5_20160906
 INCLUDEPATH += ./Qwt
 MOC_DIR=release/moc
