@@ -34,7 +34,12 @@ Form_stm32UpdataTool::Form_stm32UpdataTool(QWidget *parent) :
 
 void Form_stm32UpdataTool::showMessage(QString path)
 {
-    QString fileName = path.section("/",-1,-1);
+    QString fileName;
+    if(gCom_QueryMode != 0)
+    {
+        return;
+    }
+    fileName = path.section("/",-1,-1);
     switch(QMessageBox::question(this,tr("文件已改变"),
            " 文件:" + fileName + ",已被修改！是否重新加载！",
            QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok))
@@ -101,7 +106,7 @@ void Form_stm32UpdataTool::infoshow_slot(QString cominfo)
 
 void Form_stm32UpdataTool::updataFile(QString fileName)
 {
-    if(!fileName.isEmpty() )
+    if(!fileName.isEmpty())
     {
         QFile file_in(fileName);
         if (file_in.open(QIODevice::ReadOnly))
@@ -121,7 +126,7 @@ void Form_stm32UpdataTool::updataFile(QString fileName)
             //ui->textBrowser_2->append(tr("文件打开成功，数据格式16进制"));
             //qDebug()<<fileName<<fileName.section("/",-1,-1).section('.',0,0).section('_',1,1);
             ui->label_filename->setText(fileName.section("/",-1,-1));
-            this->setWindowTitle(tr("STM32_CAN在线升级软件 - ").append(ui->label_filename->text()));
+//            this->setWindowTitle(tr("STM32_CAN在线升级软件 - ").append(ui->label_filename->text()));
             ui->spinBox_ID->setValue(fileName.section("/",-1,-1).section('.',0,0).section('_',-1,-1).toInt());
             if((fileName.section("/",-1,-1).section('.',0,0).section('_',-2,-2)=="1k")
              ||(fileName.section("/",-1,-1).section('.',0,0).section('_',-2,-2)=="1K"))
@@ -317,9 +322,7 @@ void Form_stm32UpdataTool::on_pushButton_openfile_clicked()// 打开文件
 
     fsWatcher.addPath(fileName);
     connect(&fsWatcher, SIGNAL(fileChanged(QString)), this, SLOT(showMessage(QString)));//监控所打开的文件是否变化
-
-    updataFile(fileName);
-
+    updataFile(fileName);//更新数据
 }
 
 void Form_stm32UpdataTool::on_pushButton_ID_clicked()//选择芯片

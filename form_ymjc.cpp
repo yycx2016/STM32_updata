@@ -30,7 +30,7 @@ Form_ymjc::Form_ymjc(QWidget *parent) :
     ui->frame_3->layout()->addWidget(ADValueCurve);
     connect(this, SIGNAL(sigADChanged()), ADValueCurve, SLOT(reDrawADCurve()));
 
-    connect(serialComTool->comDevice,SIGNAL(readyRead()),this,SLOT(readMyCom()));
+//    connect(serialComTool->comDevice,SIGNAL(readyRead()),this,SLOT(readMyCom()));
 
     timer_getValue = new QTimer();
     connect(timer_getValue,SIGNAL(timeout()),this,SLOT(timer_getValue_slot()));
@@ -102,7 +102,7 @@ void Form_ymjc::on_pushButton_start_clicked()
     currentTimeEnd=0;
     timer_getValue->start(ui->spinBox_time->value());
 
-    qDebug()<<"send start";
+//    qDebug()<<"send start";
 }
 
 void Form_ymjc::on_pushButton_close_clicked()
@@ -129,7 +129,7 @@ void Form_ymjc::on_pushButton_close_clicked()
     serialComTool->comDevice->write((const char *)&to_sent_data, 12);
     timer_getValue->stop();
     currentTimeEnd = 0;
-    qDebug()<<"send stop";
+//    qDebug()<<"send stop";
 }
 
 void Form_ymjc::on_pushButton_clicked()

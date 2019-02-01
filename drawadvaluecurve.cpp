@@ -79,6 +79,10 @@ DrawADValueCurve::DrawADValueCurve(QWidget *parent) :
         this->setLayout(gridLayout);
 }
 
+void DrawADValueCurve::slot_select(QPointF point)
+{
+   qDebug()<<point.x()<<point.y();
+}
 /*
  *@brief 还原温度曲线
  */

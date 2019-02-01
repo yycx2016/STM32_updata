@@ -275,6 +275,7 @@ int Form_tool::send_GZZ()
           {
               send_solt_GZZ(ui->lineEdit_auto_12->text());
               iSsend = true;
+              i = 0;
           }
         }break;
          default:
@@ -743,7 +744,7 @@ void Form_tool::on_pushButton_mode_clicked()
     {
         send_solt_GZZ(tr("255 2 0 0 0 0 0 0 0"));
         //emit modeChanged();
-        gCom_QueryMode=3;//2
+        gCom_QueryMode=3;
     }
     else
     {

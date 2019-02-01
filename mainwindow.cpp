@@ -41,16 +41,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::updataComStatus()
 {
+    QString comStateString ;
+    if(com_status == false)
+    {
+        comStateString = "串口关闭";
+    }
+    else
+    {
+       comStateString = "串口打开";
+    }
     if(gCom_QueryMode==0)
     {
         //serialComTool->comDevice->setTimeout(-1);
-        label_comStatus->setText(tr("状态:串口打开 -- 升级模式"));
+        label_comStatus->setText(tr("状态:%1 -- 升级模式").arg(comStateString));
         disconnect(serialComTool->comDevice,SIGNAL(readyRead()),serialTool,SLOT(readMyCom()));
         disconnect(serialComTool->comDevice,SIGNAL(readyRead()),QyYmJC,SLOT(readMyCom()));
     }
     else if(gCom_QueryMode == 2)
     {
-        label_comStatus->setText(tr("状态:串口打开 -- 曲线模式"));
+        label_comStatus->setText(tr("状态:%1 -- 曲线模式").arg(comStateString));
+//        label_comStatus->setText(tr("状态:串口打开 -- 曲线模式"));
         com_status=false;
         serialComTool->closecom();
         openSerial_slot();// 打开串口
@@ -60,7 +70,8 @@ void MainWindow::updataComStatus()
     else
     {
         //serialComTool->comDevice->setTimeout(100);
-        label_comStatus->setText(tr("状态:串口打开 -- 调试模式"));
+//        label_comStatus->setText(tr("状态:串口打开 -- 调试模式"));
+        label_comStatus->setText(tr("状态:%1 -- 调试模式").arg(comStateString));
         com_status=false;
         serialComTool->closecom();
         openSerial_slot();// 打开串口
@@ -152,7 +163,7 @@ void MainWindow::on_pushButton_dis_Help_clicked()
     else
     {
         QMessageBox msgBox(this);
-        QString	mymes = this->windowTitle().append(tr("\n\n基于 QT4.7.0&WinXp 的串口调试工具\n\nAuthor：WHSu"));
+        QString	mymes = this->windowTitle().append(tr("\n\n基于 QT5.2.1&WinXp 的串口调试工具\n\nAuthor：WHSu"));
         QString pix;
         pix = ":/thank.png";
         msgBox.setIconPixmap(pix);
@@ -197,11 +208,12 @@ void MainWindow::openSerial_slot()// 打开串口
     else if(Testbit == tr("MAKE校验"))com_Testbit='m';
     else if(Testbit == tr("空校验(SPACE)"))com_Testbit='s';
     else com_Testbit='n';
-    com_status=serialComTool->opencom(com_Num,
+    com_status = serialComTool->opencom(com_Num,
                                       com_Buad.toInt(),
                                       com_Testbit,com_Databit.toInt(),
                                       com_Stopbit.toInt()
                                       );//int com_QueryMode
+
     if(com_status)
     {
             path = ":/on.jpg";
@@ -218,7 +230,6 @@ void MainWindow::openSerial_slot()// 打开串口
             {
                 label_comStatus->setText(tr("状态:串口打开 -- 调试模式"));
             }
-
 
             QSettings settingsTube("./Serial.ini", QSettings::IniFormat);
             QString str;

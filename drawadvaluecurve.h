@@ -26,6 +26,7 @@ extern quint16 currentTimeEnd;
 class DrawADValueCurve : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit DrawADValueCurve(QWidget *parent = 0);
 
@@ -38,6 +39,7 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *event);
 private slots:
     void reDrawADCurve();
+    void slot_select(QPointF);
 private:
     QwtPlot *qwtplot_ADView;
     bool isDrawCurve[4];// 四个载台曲线显示标志位

@@ -35,7 +35,7 @@ bool serialCOM::opencom(const QString &com_Num,
 //定义串口对象
     comDevice->setPortName(com_Num);//com_Num
 //以读写方式打开串口
-    serial_fd=comDevice ->open(QIODevice::ReadWrite);
+    serial_fd = comDevice ->open(QIODevice::ReadWrite);
 //波特率设置，我们设置为57600
       if(com_Buad == 50)
               comDevice->setBaudRate(BAUD50);//setBaudRate(BAUD50;
